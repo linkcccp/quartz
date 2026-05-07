@@ -59,6 +59,10 @@ export default {
     contentMeta: {
       readingTime: ({ minutes }) => `${minutes}分钟阅读`,
     },
+    staleNotice: {
+      autoStale: ({ date, days }) => `本文最后更新于 ${date}，已超过 ${days} 天，内容可能已过时。`,
+      explicitStale: ({ date }) => `本文最后更新于 ${date}，作者标记内容可能已过时。`,
+    },
   },
   pages: {
     rss: {

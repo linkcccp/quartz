@@ -29,7 +29,7 @@ button.toc-header {
 
   & .fold {
     margin-left: 0.5rem;
-    transition: transform 0.3s ease;
+    transition: transform 300ms ease-in-out;
     opacity: 0.8;
   }
 
@@ -51,8 +51,8 @@ ul.toc-content.overflow {
     color: var(--dark);
     opacity: 0.35;
     transition:
-      0.5s ease opacity,
-      0.3s ease color;
+      500ms ease-in-out opacity,
+      300ms ease-in-out color;
     &.in-view {
       opacity: 0.75;
     }

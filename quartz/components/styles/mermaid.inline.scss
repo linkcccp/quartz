@@ -9,9 +9,9 @@
   border-color: var(--dark);
   background-color: var(--light);
   border: 1px solid;
-  border-radius: 5px;
+  border-radius: var(--radius-medium);
   opacity: 0;
-  transition: 0.2s;
+  transition: 200ms ease-in-out;
 
   & > svg {
     fill: var(--light);
@@ -31,7 +31,7 @@
 pre {
   &:hover > .expand-button {
     opacity: 1;
-    transition: 0.2s;
+    transition: 200ms ease-in-out;
   }
 }
 
@@ -55,7 +55,7 @@ pre {
   & > #mermaid-space {
     border: 1px solid var(--lightgray);
     background-color: var(--light);
-    border-radius: 5px;
+    border-radius: var(--radius-medium);
     position: fixed;
     top: 50%;
     left: 50%;
@@ -67,7 +67,7 @@ pre {
     & > .mermaid-content {
       position: relative;
       transform-origin: 0 0;
-      transition: transform 0.1s ease;
+      transition: transform 100ms ease-in-out;
       overflow: visible;
       min-height: 200px;
       min-width: 200px;
@@ -110,7 +110,7 @@ pre {
         cursor: pointer;
         font-size: 16px;
         font-family: var(--bodyFont);
-        transition: all 0.2s ease;
+        transition: all 200ms ease-in-out;
 
         &:hover {
           background: var(--lightgray);

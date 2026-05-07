@@ -13,6 +13,7 @@ type OrderEntries = "sort" | "filter" | "map"
 
 export interface Options {
   title?: string
+  bare?: boolean
   folderDefaultState: "collapsed" | "open"
   folderClickBehavior: "collapse" | "link"
   useSavedState: boolean
@@ -22,7 +23,7 @@ export interface Options {
   order: OrderEntries[]
 }
 
-const defaultOptions: Options = {
+export const defaultOptions: Options = {
   folderDefaultState: "collapsed",
   folderClickBehavior: "link",
   useSavedState: true,
@@ -61,6 +62,49 @@ export default ((userOpts?: Partial<Options>) => {
   const { OverflowList, overflowListAfterDOMLoaded } = OverflowListFactory()
 
   const Explorer: QuartzComponent = ({ cfg, displayClass }: QuartzComponentProps) => {
+    if (opts.bare) {
+      return (
+        <>
+          <div class="explorer-content" aria-expanded={false} role="group">
+            <OverflowList class="explorer-ul" />
+          </div>
+          <template id="template-file">
+            <li>
+              <a href="#"></a>
+            </li>
+          </template>
+          <template id="template-folder">
+            <li>
+              <div class="folder-container">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="5 8 14 8"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="folder-icon"
+                >
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+                <div>
+                  <button class="folder-button">
+                    <span class="folder-title"></span>
+                  </button>
+                </div>
+              </div>
+              <div class="folder-outer">
+                <ul class="content"></ul>
+              </div>
+            </li>
+          </template>
+        </>
+      )
+    }
+
     const id = `explorer-${numExplorers++}`
 
     return (

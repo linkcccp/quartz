@@ -56,6 +56,16 @@ export type Analytics =
       host?: string
     }
 
+export interface PWAOptions {
+  enabled: boolean
+  name: string
+  shortName: string
+  description?: string
+  themeColor: string
+  backgroundColor: string
+  icon?: string
+}
+
 export interface GlobalConfiguration {
   pageTitle: string
   pageTitleSuffix?: string
@@ -83,6 +93,7 @@ export interface GlobalConfiguration {
    * Region Codes: https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
    */
   locale: ValidLocale
+  pwa?: PWAOptions
 }
 
 export interface QuartzConfig {
