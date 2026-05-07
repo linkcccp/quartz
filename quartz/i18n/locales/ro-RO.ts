@@ -60,6 +60,12 @@ export default {
       readingTime: ({ minutes }) =>
         minutes == 1 ? `lectură de 1 minut` : `lectură de ${minutes} minute`,
     },
+    staleNotice: {
+      autoStale: ({ date, days }) =>
+        `This article was last updated on ${date}, ${days} days ago. Content may be outdated.`,
+      explicitStale: ({ date }) =>
+        `This article was last updated on ${date}. Content may be outdated.`,
+    },
   },
   pages: {
     rss: {

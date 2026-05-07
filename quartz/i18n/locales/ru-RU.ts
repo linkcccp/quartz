@@ -60,6 +60,12 @@ export default {
     contentMeta: {
       readingTime: ({ minutes }) => `время чтения ~${minutes} мин.`,
     },
+    staleNotice: {
+      autoStale: ({ date, days }) =>
+        `This article was last updated on ${date}, ${days} days ago. Content may be outdated.`,
+      explicitStale: ({ date }) =>
+        `This article was last updated on ${date}. Content may be outdated.`,
+    },
   },
   pages: {
     rss: {

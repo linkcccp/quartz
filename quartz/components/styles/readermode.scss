@@ -17,7 +17,7 @@
     top: calc(50% - 10px);
     fill: var(--darkgray);
     stroke: var(--darkgray);
-    transition: opacity 0.1s ease;
+    transition: opacity 100ms ease-in-out;
   }
 }
 
@@ -25,7 +25,7 @@
   & .sidebar.left,
   & .sidebar.right {
     opacity: 0;
-    transition: opacity 0.2s ease;
+    transition: opacity 200ms ease-in-out;
 
     &:hover {
       opacity: 1;

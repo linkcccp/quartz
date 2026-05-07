@@ -4,14 +4,14 @@
 .callout {
   border: 1px solid var(--border);
   background-color: var(--bg);
-  border-radius: 5px;
+  border-radius: var(--radius-medium);
   padding: 0 1rem;
   overflow-y: hidden;
   box-sizing: border-box;
 
   & > .callout-content {
     display: grid;
-    transition: grid-template-rows 0.1s cubic-bezier(0.02, 0.01, 0.47, 1);
+    transition: grid-template-rows 200ms cubic-bezier(0.02, 0.01, 0.47, 1);
     overflow: hidden;
 
     & > :first-child {

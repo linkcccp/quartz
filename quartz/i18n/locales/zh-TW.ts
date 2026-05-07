@@ -59,6 +59,12 @@ export default {
     contentMeta: {
       readingTime: ({ minutes }) => `閱讀時間約 ${minutes} 分鐘`,
     },
+    staleNotice: {
+      autoStale: ({ date, days }) =>
+        `This article was last updated on ${date}, ${days} days ago. Content may be outdated.`,
+      explicitStale: ({ date }) =>
+        `This article was last updated on ${date}. Content may be outdated.`,
+    },
   },
   pages: {
     rss: {

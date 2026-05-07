@@ -5,11 +5,27 @@ import * as Component from "./quartz/components"
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
-  afterBody: [],
+  afterBody: [
+    Component.Comments({
+      provider: "giscus",
+      options: {
+        repo: "linkcccp/BlogTalk",
+        repoId: "R_kgDOMqZVXQ",
+        category: "General",
+        categoryId: "DIC_kwDOMqZVXc4CiEPV",
+        lang: "zh-CN",
+        mapping: "pathname",
+        inputPosition: "top",
+        reactionsEnabled: true,
+        strict: false,
+      },
+    }),
+  ],
   footer: Component.Footer({
     links: {
-      GitHub: "https://github.com/jackyzha0/quartz",
-      "Discord Community": "https://discord.gg/cRFFHYye7t",
+      GitHub: "https://github.com/linkcccp/quartz",
+      Email: "mailto:winstonforwork@outlook.com",
+      RSS: "/index.xml",
     },
   }),
 }
@@ -22,6 +38,7 @@ export const defaultContentPageLayout: PageLayout = {
       condition: (page) => page.fileData.slug !== "index",
     }),
     Component.ArticleTitle(),
+    Component.StaleNotice({ threshold: 180 }),
     Component.ContentMeta(),
     Component.TagList(),
   ],
@@ -38,7 +55,12 @@ export const defaultContentPageLayout: PageLayout = {
         { Component: Component.ReaderMode() },
       ],
     }),
-    Component.Explorer(),
+    Component.HamburgerMenu({
+      explorerTitle: "目录",
+      recentNotesTitle: "最近更新",
+      recentNotesLimit: 10,
+      showTags: false,
+    }),
   ],
   right: [
     Component.Graph(),

@@ -23,6 +23,8 @@ import Breadcrumbs from "./Breadcrumbs"
 import Comments from "./Comments"
 import Flex from "./Flex"
 import ConditionalRender from "./ConditionalRender"
+import HamburgerMenu from "./linkcccp_HamburgerMenu"
+import StaleNotice from "./linkcccp_StaleNotice"
 
 export {
   ArticleTitle,
@@ -50,4 +52,6 @@ export {
   Comments,
   Flex,
   ConditionalRender,
+  HamburgerMenu,
+  StaleNotice,
 }

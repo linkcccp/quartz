@@ -62,6 +62,10 @@ export interface Translation {
     contentMeta: {
       readingTime: (variables: { minutes: number }) => string
     }
+    staleNotice: {
+      autoStale: (variables: { date: string; days: number }) => string
+      explicitStale: (variables: { date: string }) => string
+    }
   }
   pages: {
     rss: {

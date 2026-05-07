@@ -2,7 +2,9 @@ import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } fro
 import { FullSlug, SimpleSlug, resolveRelative } from "../util/path"
 import { QuartzPluginData } from "../plugins/vfile"
 import { byDateAndAlphabetical } from "./PageList"
-import style from "./styles/recentNotes.scss"
+// @ts-ignore
+import recentNotesScript from "./scripts/linkcccp_recentnotes.inline"
+import style from "./styles/linkcccp_recentNotes.scss"
 import { Date, getDate } from "./Date"
 import { GlobalConfiguration } from "../cfg"
 import { i18n } from "../i18n"
@@ -18,10 +20,10 @@ interface Options {
 }
 
 const defaultOptions = (cfg: GlobalConfiguration): Options => ({
-  limit: 3,
+  limit: 10,
   linkToMore: false,
   showTags: true,
-  filter: () => true,
+  filter: (f) => f.slug !== "index",
   sort: byDateAndAlphabetical(cfg),
 })
 
@@ -37,7 +39,23 @@ export default ((userOpts?: Partial<Options>) => {
     const remaining = Math.max(0, pages.length - opts.limit)
     return (
       <div class={classNames(displayClass, "recent-notes")}>
-        <h3>{opts.title ?? i18n(cfg.locale).components.recentNotes.title}</h3>
+        <button type="button" class="recent-notes-toggle">
+          <h3>{opts.title ?? i18n(cfg.locale).components.recentNotes.title}</h3>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="5 8 14 8"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="fold"
+          >
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
         <ul class="recent-ul">
           {pages.slice(0, opts.limit).map((page) => {
             const title = page.frontmatter?.title ?? i18n(cfg.locale).propertyDefaults.title
@@ -89,5 +107,6 @@ export default ((userOpts?: Partial<Options>) => {
   }
 
   RecentNotes.css = style
+  RecentNotes.beforeDOMLoaded = recentNotesScript
   return RecentNotes
 }) satisfies QuartzComponentConstructor

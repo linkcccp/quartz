@@ -33,7 +33,7 @@ interface Options {
 const defaultOptions: Options = {
   enableSiteMap: true,
   enableRSS: true,
-  rssLimit: 10,
+  rssLimit: 0,
   rssFullHtml: false,
   rssSlug: "index",
   includeEmptyFiles: true,
@@ -75,7 +75,7 @@ function generateRSSFeed(cfg: GlobalConfiguration, idx: ContentIndexMap, limit?:
       return f1.title.localeCompare(f2.title)
     })
     .map(([slug, content]) => createURLEntry(simplifySlug(slug), content))
-    .slice(0, limit ?? idx.size)
+    .slice(0, limit || idx.size)
     .join("")
 
   return `<?xml version="1.0" encoding="UTF-8" ?>

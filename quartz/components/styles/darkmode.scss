@@ -9,6 +9,12 @@
   margin: 0;
   text-align: inherit;
   flex-shrink: 0;
+  border-radius: var(--radius-small);
+
+  &:focus-visible {
+    outline: 2px solid var(--secondary);
+    outline-offset: 2px;
+  }
 
   & svg {
     position: absolute;
@@ -16,7 +22,7 @@
     height: 20px;
     top: calc(50% - 10px);
     fill: var(--darkgray);
-    transition: opacity 0.1s ease;
+    transition: opacity 200ms ease-in-out;
   }
 }
 

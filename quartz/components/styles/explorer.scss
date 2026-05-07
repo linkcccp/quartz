@@ -21,7 +21,7 @@
       margin: 0;
     }
 
-    .hide-until-loaded ~ .explorer-content {
+    .hide-until-loaded ~ .explorer-drawer {
       display: none;
     }
   }
@@ -30,22 +30,20 @@
 .explorer {
   display: flex;
   flex-direction: column;
-  overflow-y: hidden;
+  overflow: hidden;
 
   min-height: 1.2rem;
   flex: 0 1 auto;
 
   &.collapsed {
-    flex: 0 1 1.2rem;
-
-    & .fold {
+    .desktop-explorer .fold {
       transform: rotateZ(-90deg);
     }
   }
 
   & .fold {
     margin-left: 0.5rem;
-    transition: transform 0.3s ease;
+    transition: transform 300ms ease-in-out;
     opacity: 0.8;
   }
 
@@ -85,7 +83,7 @@
 
   svg {
     pointer-events: all;
-    transition: transform 0.35s ease;
+    transition: transform 300ms ease-in-out;
 
     & > polyline {
       pointer-events: none;
@@ -103,6 +101,8 @@ button.desktop-explorer {
   color: var(--dark);
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
 
   & h2 {
     font-size: 1rem;
@@ -143,7 +143,7 @@ button.desktop-explorer {
     display: grid;
     grid-template-rows: 0fr;
     transition-property: grid-template-rows, visibility;
-    transition-duration: 0.3s;
+    transition-duration: 300ms;
     transition-timing-function: ease-in-out;
   }
 
@@ -207,7 +207,7 @@ button.desktop-explorer {
   margin-right: 5px;
   color: var(--secondary);
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: transform 300ms ease-in-out;
   backface-visibility: visible;
   flex-shrink: 0;
 }
@@ -220,12 +220,22 @@ li:has(> .folder-outer:not(.open)) > .folder-container > svg {
   color: var(--tertiary);
 }
 
+@media all and not ($mobile) {
+  .explorer-drawer {
+    display: contents;
+  }
+
+  .explorer.collapsed .explorer-content {
+    display: none;
+  }
+}
+
 .explorer {
   @media all and ($mobile) {
     &.collapsed {
       flex: 0 0 34px;
 
-      & > .explorer-content {
+      & > .explorer-drawer {
         transform: translateX(-100vw);
         visibility: hidden;
       }
@@ -234,13 +244,13 @@ li:has(> .folder-outer:not(.open)) > .folder-container > svg {
     &:not(.collapsed) {
       flex: 0 0 34px;
 
-      & > .explorer-content {
+      & > .explorer-drawer {
         transform: translateX(0);
         visibility: visible;
       }
     }
 
-    .explorer-content {
+    .explorer-drawer {
       box-sizing: border-box;
       z-index: 100;
       position: absolute;
@@ -254,11 +264,17 @@ li:has(> .folder-outer:not(.open)) > .folder-container > svg {
       transition:
         transform 200ms ease,
         visibility 200ms ease;
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
       padding: 4rem 0 2rem 0;
       height: 100dvh;
       max-height: 100dvh;
       visibility: hidden;
+    }
+
+    .explorer-drawer .explorer-content {
+      margin-top: 0;
+      overflow-y: visible;
     }
 
     .mobile-explorer {

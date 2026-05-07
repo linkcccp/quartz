@@ -1,0 +1,6 @@
+{
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "typescript.updateImportsOnFileRename.enabled": "never",
+  "js/ts.suggest.autoImports": false,
+  "typescript.preferences.includePackageJsonAutoImports": "off"
+}
