@@ -20,19 +20,49 @@ pnpm run test                  # tsx --test (所有测试)
 ## 项目结构
 
 ```
-quartz/                 # 核心源码
-  bootstrap-cli.mjs     # CLI 入口
-  components/           # Preact 组件
-  plugins/              # transformers / filters / emitters
-  styles/               # SCSS (base.scss, variables.scss, callouts.scss)
-  i18n/locales/         # 30+ 语言翻译
-  util/theme.ts         # joinStyles() 注入 CSS 自定义属性
-quartz.config.ts        # 用户配置
-quartz.layout.ts        # 页面布局
-content/                # 用户 Markdown 笔记
-test/                   # 集成测试
-docs/linkcccp/api.md    # 自定义组件 API 文档
-scripts/sync-content.sh # Windows→WSL 同步脚本
+quartz/                     # 核心源码
+  bootstrap-cli.mjs         # CLI 入口
+  components/               # Preact 组件
+  plugins/                  # transformers / filters / emitters
+  styles/                   # SCSS (base.scss, variables.scss, callouts.scss)
+  i18n/locales/             # 30+ 语言翻译
+  util/theme.ts             # joinStyles() 注入 CSS 自定义属性
+quartz.config.ts            # 用户配置
+quartz.layout.ts            # 页面布局
+content/                    # git submodule → linkcccp/quartz-content (Private)
+test/                       # 集成测试
+docs/linkcccp/api.md        # 自定义组件 API 文档
+scripts/sync-content.sh     # Windows→WSL 同步脚本
+```
+
+## 内容子模块 (Content Submodule)
+
+`content/` 是 git submodule，指向私有仓库 `linkcccp/quartz-content`。
+
+**设计意图：**
+- 主仓库 (`linkcccp/quartz`) 只含代码/配置，可公开 fork
+- 文章内容隔离在私有仓库，不污染主仓库 git log
+- Cloudflare Pages 开启 "Include submodules" 即可拉取内容构建
+
+**日常操作：**
+
+```bash
+# 首次克隆后初始化子模块
+git submodule update --init --recursive
+
+# 同步文章后，在内容仓库中提交
+cd content
+git add -A && git commit -m "sync: YYYY-MM-DD"
+git push
+
+# 然后回到主仓库，提交子模块指针变更
+cd ..
+git add content
+git commit -m "chore: update content submodule"
+git push
+
+# 让子模块指向最新远程提交
+cd content && git pull origin main
 ```
 
 ## 自定义组件约定 (linkcccp\_)
@@ -94,7 +124,7 @@ pwa: { enabled: true, name: "...", shortName: "...", themeColor: "...", backgrou
 - **RecentNotes**：默认 filter 排除 `index.md`
 - **RSS**：`rssLimit: 0` 输出全部笔记，Footer 有 `RSS: "/index.xml"` 链接
 - **`baseUrl`**：`www.linkcf.top`
-- **同步脚本**：`scripts/sync-content.sh` — 从 Windows `C:\Users\Yazov\OneDrive\Blog\content` 同步到 WSL 并移除 `draft: true` 文件，转换 CRLF→LF
+- **同步脚本**：`scripts/sync-content.sh` — 从 Windows `C:\Users\Yazov\OneDrive\Blog\content` 同步到 WSL 子模块，移除 `draft: true` 文件，转换 CRLF→LF，自动在子模块内提交
 
 ## 测试注意事项
 
