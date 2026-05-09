@@ -83,9 +83,6 @@ interface ExplorerOptions {
 ### 使用示例
 
 ```typescript
-// 标准用法
-Component.Explorer()
-
 // 自定义标题和文件夹行为
 Component.Explorer({
   title: "目录",
@@ -96,15 +93,15 @@ Component.Explorer({
 Explorer({ bare: true })
 ```
 
+> **注意**：`defaultListPageLayout` 已统一使用 `HamburgerMenu` 包裹后的 Explorer（含 `bare: true`），外部不再直接调用 `Component.Explorer()`。
+
 ### `bare` 模式
 
 `bare: true` 时 Explorer 跳过最外层 `<div class="explorer">` 和 toggle 按钮，仅渲染内容：
 
 ```html
-<div class="explorer-content">
-  <ul class="explorer-ul">
-    ...
-  </ul>
+<div class="explorer-content" aria-expanded="false" role="group">
+  <OverflowList class="explorer-ul"> ... </OverflowList>
 </div>
 <template id="template-file">...</template>
 <template id="template-folder">...</template>
@@ -128,7 +125,7 @@ Explorer({ bare: true })
 ```typescript
 interface HamburgerMenuOptions {
   explorerTitle?: string // Explorer 标题，默认 i18n 翻译
-  recentNotesTitle?: string // RecentNotes 标题
+  recentNotesTitle?: string // RecentNotes 标题，默认 i18n 翻译
   recentNotesLimit?: number // 最大显示数，默认 10
   showTags?: boolean // 是否显示标签，默认 false
 }
@@ -137,7 +134,15 @@ interface HamburgerMenuOptions {
 ### 使用示例
 
 ```typescript
-// quartz.layout.ts
+// quartz.layout.ts — 内容页
+Component.HamburgerMenu({
+  explorerTitle: "目录",
+  recentNotesTitle: "最近更新",
+  recentNotesLimit: 10,
+  showTags: false,
+})
+
+// quartz.layout.ts — 列表页（文件夹/标签），也统一使用 HamburgerMenu
 Component.HamburgerMenu({
   explorerTitle: "目录",
   recentNotesTitle: "最近更新",
@@ -149,22 +154,25 @@ Component.HamburgerMenu({
 ### 生成的 HTML 结构
 
 ```html
-<div class="explorer">
+<div class="explorer" data-behavior="link" data-collapsed="collapsed" data-savestate="true">
   <!-- 复用 explorer 类 -->
-  <button class="explorer-toggle mobile-explorer">
+  <button type="button" class="explorer-toggle mobile-explorer hide-until-loaded">
     <!-- 汉堡图标：三条横线 -->
   </button>
-  <button class="explorer-toggle desktop-explorer">
-    <h2>标题</h2>
+  <button
+    type="button"
+    class="title-button explorer-toggle desktop-explorer"
+    data-mobile="false"
+    aria-expanded="true"
+  >
     <svg class="fold"><!-- 折叠箭头 --></svg>
+    <h2>标题</h2>
   </button>
   <div class="explorer-drawer">
     <!-- 移动端全屏抽屉 -->
     <div class="explorer-content">
       <!-- Explorer 树形结构 -->
-      <ul class="explorer-ul">
-        ...
-      </ul>
+      <OverflowList class="explorer-ul"> ... </OverflowList>
     </div>
     <div class="recent-notes">
       <!-- RecentNotes 列表 -->
@@ -269,9 +277,11 @@ Component.StaleNotice({ threshold: 180 })
 
 ### 配置项
 
+`enabled` 在 `quartz.config.ts` 的 `configuration.pwa` 配置中声明，其余字段透传给插件。
+
 ```typescript
 // quartz.config.ts
-interface PWAOptions {
+interface PWAConfig {
   enabled: boolean // 是否启用 PWA
   name: string // 应用全名
   shortName: string // 短名称
@@ -335,7 +345,7 @@ Service Worker 文件包含构建时间戳和所有静态文件的 SHA256 内容
 项目使用 **Fluent 2** 设计语言作为视觉主题，基于 Microsoft 的 Fluent Design System。
 
 ```
-文件: quartz.util/theme.ts        (CSS 自定义属性注入)
+文件: quartz/util/theme.ts        (CSS 自定义属性注入)
 文件: quartz/styles/variables.scss (布局/间距变量)
 文件: quartz/styles/base.scss      (基础样式)
 文件: quartz.config.ts             (用户配置)
@@ -422,42 +432,6 @@ theme: {
 
 间距、圆角、阴影等 token 定义在 `quartz/util/theme.ts` 和组件 SCSS 文件中，需通过修改源码调整。
 
----
-
-## Windows-WSL 同步脚本
-
-在 Windows 下用 Obsidian 编辑文章，WSL 中运行脚本同步内容并构建站点。
-
-```
-文件: scripts/sync-content.sh
-```
-
-### 工作原理
-
-从 Windows 路径 `C:\Users\Yazov\OneDrive\Blog\content` 同步到 WSL 路径 `~/source/quartz/content/`，执行四步：
-
-1. **复制文件**：优先用 `rsync --delete`（需 `sudo apt install rsync`），无 rsync 时回退到 `cp --update`
-2. **移除草稿**：扫描 frontmatter 中 `draft: true` 的文章并从 WSL 侧删除
-3. **转换行尾**：将 CRLF 转换为 LF（`sed -i 's/\r$//'`）
-4. **完成**
-
-### 使用
-
-```bash
-# WSL 中执行
-./scripts/sync-content.sh && npx quartz build
-```
-
-### 同步范围
-
-- `*.md`（Markdown 文章）
-- `*.png`, `*.jpg`, `*.jpeg`, `*.gif`, `*.svg`, `*.webp`（图片）
-- `*.pdf`（文档）
-
-`.obsidian` 配置目录和 `draft: true` 文件不会被同步。`index.md` 等 WSL 侧独有文件不受影响（仅在 Windows 侧也存时才覆盖）。
-
----
-
 ## RSS 订阅
 
 站点默认提供 RSS Feed，同时支持浏览器自动发现和 Footer 直达链接。
@@ -485,3 +459,41 @@ Plugin.ContentIndex({
   rssLimit: 10,
 })
 ```
+
+---
+
+## TableOfContents 滚动与定位
+
+### 修改的样式
+
+TOC 组件的默认 `overflow-y: hidden` 导致条目过多时底部内容被裁切且无滚动条。已做两处调整：
+
+```
+文件: quartz/components/styles/toc.scss
+文件: quartz/styles/base.scss
+```
+
+| 文件        | 变更                                                                      |
+| ----------- | ------------------------------------------------------------------------- |
+| `toc.scss`  | `overflow-y: hidden` → `auto`；`flex: 0 0.5 auto` → `1 1 0`               |
+| `toc.scss`  | 折叠状态恢复 `overflow-y: hidden`                                         |
+| `toc.scss`  | 新增 `::-webkit-scrollbar` 细滚动条样式 (4px, `var(--gray)`)              |
+| `base.scss` | `.sidebar.right` 新增 `overflow: hidden`，约束子元素在 100vh 粘性侧边栏内 |
+
+### TOC 点击跳转与 `<img>` 标签
+
+点击 TOC 条目后 `scrollIntoView()` 依赖当前布局计算滚动位置。
+
+**若 `<img>` 标签只写 `width` 不写 `height`**：图片加载前高度为 0，加载后瞬间增高造成布局偏移，导致第一次点击跳转不准，需多次点击。
+
+**正确写法**：
+
+```html
+<!-- 推荐：width + height，布局稳定 -->
+<img src="cover.webp" alt="封面" width="120" height="180" />
+
+<!-- 避免：仅 width，布局偏移 -->
+<img src="cover.webp" alt="封面" width="120" />
+```
+
+`width`/`height` 填写图片原始比例下的值。浏览器结合 `height: auto` CSS 自动保持比例缩放，不会强制锁定显示尺寸。图书封面常见比例为 2:3，可按 `width=120 height=180` 填写。

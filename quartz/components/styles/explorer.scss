@@ -21,7 +21,7 @@
       margin: 0;
     }
 
-    .hide-until-loaded ~ .explorer-drawer {
+    .hide-until-loaded ~ .explorer-content {
       display: none;
     }
   }
@@ -42,7 +42,7 @@
   }
 
   & .fold {
-    margin-left: 0.5rem;
+    margin-right: 0.5rem;
     transition: transform 300ms ease-in-out;
     opacity: 0.8;
   }
@@ -101,7 +101,6 @@ button.desktop-explorer {
   color: var(--dark);
   display: flex;
   align-items: center;
-  justify-content: space-between;
   width: 100%;
 
   & h2 {
@@ -220,13 +219,18 @@ li:has(> .folder-outer:not(.open)) > .folder-container > svg {
   color: var(--tertiary);
 }
 
-@media all and not ($mobile) {
-  .explorer-drawer {
-    display: contents;
-  }
+.explorer-drawer {
+  display: contents;
+}
 
+@media all and not ($mobile) {
   .explorer.collapsed .explorer-content {
     display: none;
+  }
+
+  .explorer .explorer-drawer .explorer-content {
+    max-height: none;
+    overflow-y: visible;
   }
 }
 
@@ -235,7 +239,7 @@ li:has(> .folder-outer:not(.open)) > .folder-container > svg {
     &.collapsed {
       flex: 0 0 34px;
 
-      & > .explorer-drawer {
+      .explorer-content {
         transform: translateX(-100vw);
         visibility: hidden;
       }
@@ -244,13 +248,13 @@ li:has(> .folder-outer:not(.open)) > .folder-container > svg {
     &:not(.collapsed) {
       flex: 0 0 34px;
 
-      & > .explorer-drawer {
+      .explorer-content {
         transform: translateX(0);
         visibility: visible;
       }
     }
 
-    .explorer-drawer {
+    .explorer-content {
       box-sizing: border-box;
       z-index: 100;
       position: absolute;
@@ -264,17 +268,15 @@ li:has(> .folder-outer:not(.open)) > .folder-container > svg {
       transition:
         transform 200ms ease,
         visibility 200ms ease;
-      overflow-y: auto;
-      overflow-x: hidden;
+      overflow: hidden;
       padding: 4rem 0 2rem 0;
       height: 100dvh;
       max-height: 100dvh;
       visibility: hidden;
     }
 
-    .explorer-drawer .explorer-content {
-      margin-top: 0;
-      overflow-y: visible;
+    .recent-notes {
+      display: none;
     }
 
     .mobile-explorer {

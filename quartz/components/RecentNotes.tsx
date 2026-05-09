@@ -40,7 +40,6 @@ export default ((userOpts?: Partial<Options>) => {
     return (
       <div class={classNames(displayClass, "recent-notes")}>
         <button type="button" class="recent-notes-toggle">
-          <h3>{opts.title ?? i18n(cfg.locale).components.recentNotes.title}</h3>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="14"
@@ -55,6 +54,7 @@ export default ((userOpts?: Partial<Options>) => {
           >
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
+          <h3>{opts.title ?? i18n(cfg.locale).components.recentNotes.title}</h3>
         </button>
         <ul class="recent-ul">
           {pages.slice(0, opts.limit).map((page) => {

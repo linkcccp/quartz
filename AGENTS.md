@@ -40,6 +40,7 @@ scripts/sync-content.sh     # Windows→WSL 同步脚本
 `content/` 是 git submodule，指向私有仓库 `linkcccp/quartz-content`。
 
 **设计意图：**
+
 - 主仓库 (`linkcccp/quartz`) 只含代码/配置，可公开 fork
 - 文章内容隔离在私有仓库，不污染主仓库 git log
 - Cloudflare Pages 开启 "Include submodules" 即可拉取内容构建

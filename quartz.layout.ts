@@ -84,7 +84,12 @@ export const defaultListPageLayout: PageLayout = {
         { Component: Component.Darkmode() },
       ],
     }),
-    Component.Explorer(),
+    Component.HamburgerMenu({
+      explorerTitle: "目录",
+      recentNotesTitle: "最近更新",
+      recentNotesLimit: 10,
+      showTags: false,
+    }),
   ],
   right: [],
 }
