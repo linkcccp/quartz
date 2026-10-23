@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "plugins": {
+    "quartz-site-features": {
+      "source": "github:linkcccp/quartz-site-features#main",
+      "resolved": "https://github.com/linkcccp/quartz-site-features.git",
+      "commit": "8d01ea6c7270af3d306a604274897cd1d290e086",
+      "ref": "main",
+      "installedAt": "2026-10-23T07:40:59.856Z"
+    }
+  }
+}
