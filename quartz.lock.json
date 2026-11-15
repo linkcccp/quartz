@@ -4,9 +4,9 @@
     "quartz-site-features": {
       "source": "github:linkcccp/quartz-site-features#main",
       "resolved": "https://github.com/linkcccp/quartz-site-features.git",
-      "commit": "46771489c979720362e86ac32ac05d39ee5bf09c",
+      "commit": "bcfe5ec7f8d0b739d1c75d92239b592c8d75fc18",
       "ref": "main",
-      "installedAt": "2026-11-15T04:27:46.789Z"
+      "installedAt": "2026-11-15T05:13:35.728Z"
     }
   }
 }
